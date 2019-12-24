@@ -11,6 +11,6 @@ dependencies:
   - matplotlib
   - pip
   - pip:                            # Packages installed from PyPI
-      - https://test-files.pythonhosted.org/packages/fb/eb/f74b96d7416bbccf36693df808ca1c4faa2243083bb5308f692fb1264a42/lets_plot-1.0.dev1-cp37-cp37m-manylinux1_x86_64.whl
+      - https://test-files.pythonhosted.org/packages/ea/71/28b1e842b0b355eab3c1ba77dfc1fa979f3bb96590663737fc2a9ff94dea/lets_plot-1.1.dev1-cp37-cp37m-manylinux1_x86_64.whl
       - pypng
       - scikit-datasets
