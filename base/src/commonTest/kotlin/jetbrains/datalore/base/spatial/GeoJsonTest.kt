@@ -9,8 +9,13 @@ import jetbrains.datalore.base.typedGeometry.*
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
+typealias GeomTag = Generic
+
 class GeoJsonTest {
 
+    private fun parse(geoJson: String, handler: SimpleFeature.Consumer<GeomTag>.() -> Unit) {
+        GeoJson.parse<GeomTag>(geoJson, handler)
+    }
     @Test
     fun simplePoint() {
         val expected = mutableListOf(
@@ -22,8 +27,8 @@ class GeoJsonTest {
             |}
             """.trimMargin()
 
-        GeoJson.parse(data) {
-            point = { expected.removeOrThrow(it) }
+        parse(data) {
+            onPoint = { expected.removeOrThrow(it) }
         }
         assertTrue { expected.isEmpty() }
     }
@@ -41,8 +46,8 @@ class GeoJsonTest {
             |}
             """.trimMargin()
 
-        GeoJson.parse(data) {
-            lineString = { expected.removeOrThrow(it) }
+        parse(data) {
+            onLineString = { expected.removeOrThrow(it) }
         }
         assertTrue { expected.isEmpty() }
     }
@@ -60,8 +65,8 @@ class GeoJsonTest {
             |}
             """.trimMargin()
 
-        GeoJson.parse(data) {
-            polygon = { expected.removeOrThrow(it) }
+        parse(data) {
+            onPolygon = { expected.removeOrThrow(it) }
         }
         assertTrue { expected.isEmpty() }
     }
@@ -83,8 +88,8 @@ class GeoJsonTest {
             |}
             """.trimMargin()
 
-        GeoJson.parse(data) {
-            polygon = { expected.removeOrThrow(it) }
+        parse(data) {
+            onPolygon = { expected.removeOrThrow(it) }
         }
         assertTrue { expected.isEmpty() }
     }
@@ -102,8 +107,8 @@ class GeoJsonTest {
             |}
             """.trimMargin()
 
-        GeoJson.parse(data) {
-            multiPoint = { points, _ -> expected.removeOrThrow(points) }
+        parse(data) {
+            onMultiPoint = { expected.removeOrThrow(it) }
         }
         assertTrue { expected.isEmpty() }
     }
@@ -125,8 +130,8 @@ class GeoJsonTest {
             |}
             """.trimMargin()
 
-        GeoJson.parse(data) {
-            multiLineString = { lineStrings, _ -> expected.removeOrThrow(lineStrings) }
+        parse(data) {
+            onMultiLineString = { expected.removeOrThrow(it) }
         }
 
         assertTrue { expected.isEmpty() }
@@ -157,8 +162,8 @@ class GeoJsonTest {
             |}
             """.trimMargin()
 
-        GeoJson.parse(data) {
-            multiPolygon = { multiPolygon, _ -> expected.removeOrThrow(multiPolygon) }
+        parse(data) {
+            onMultiPolygon = { expected.removeOrThrow(it) }
         }
 
         assertTrue { expected.isEmpty() }
@@ -191,8 +196,8 @@ class GeoJsonTest {
             |}
             """.trimMargin()
 
-        GeoJson.parse(data) {
-            multiPolygon = { multiPolygon, _ -> expected.removeOrThrow(multiPolygon) }
+        parse(data) {
+            onMultiPolygon = { expected.removeOrThrow(it) }
         }
 
         assertTrue(expected.isEmpty())
@@ -239,10 +244,10 @@ class GeoJsonTest {
             |}
             """.trimMargin()
 
-        GeoJson.parse(data) {
-            point = { expectedPoint.removeOrThrow(it) }
-            lineString = { expectedLineString.removeOrThrow(it) }
-            polygon = { expectedPolygon.removeOrThrow(it) }
+        parse(data) {
+            onPoint = { expectedPoint.removeOrThrow(it) }
+            onLineString = { expectedLineString.removeOrThrow(it) }
+            onPolygon = { expectedPolygon.removeOrThrow(it) }
         }
 
         assertTrue(expectedPoint.isEmpty())
@@ -253,12 +258,12 @@ class GeoJsonTest {
     companion object {
         private fun <T> MutableList<T>.removeOrThrow(v: T) = if (contains(v)) { remove(v) } else { error("Object $v not found") }
         private fun p(x: Int, y: Int) = p(x.toDouble(), y.toDouble())
-        private fun p(x: Double, y: Double) = explicitVec<Generic>(x, y)
-        private fun lineString(vararg points: Vec<Generic>) = LineString<Generic>(points.toList())
-        private fun ring(vararg points: Vec<Generic>) = Ring<Generic>(points.toList())
-        private fun polygon(vararg rings: Ring<Generic>) = Polygon<Generic>(rings.toList())
-        private fun multiPoint(vararg points: Vec<Generic>) = MultiPoint<Generic>(points.toList())
-        private fun multiLineString(vararg lineStrings: LineString<Generic>) = MultiLineString<Generic>(lineStrings.toList())
-        private fun multiPolygon(vararg polygons: Polygon<Generic>) = MultiPolygon<Generic>(polygons.toList())
+        private fun p(x: Double, y: Double) = explicitVec<GeomTag>(x, y)
+        private fun lineString(vararg points: Vec<GeomTag>) = LineString<GeomTag>(points.toList())
+        private fun ring(vararg points: Vec<GeomTag>) = Ring<GeomTag>(points.toList())
+        private fun polygon(vararg rings: Ring<GeomTag>) = Polygon<GeomTag>(rings.toList())
+        private fun multiPoint(vararg points: Vec<GeomTag>) = MultiPoint<GeomTag>(points.toList())
+        private fun multiLineString(vararg lineStrings: LineString<GeomTag>) = MultiLineString<GeomTag>(lineStrings.toList())
+        private fun multiPolygon(vararg polygons: Polygon<GeomTag>) = MultiPolygon<GeomTag>(polygons.toList())
     }
 }

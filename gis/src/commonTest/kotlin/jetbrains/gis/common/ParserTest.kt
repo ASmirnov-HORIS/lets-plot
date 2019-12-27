@@ -494,7 +494,7 @@ class ParserTest {
     }
 
 
-    internal class CollectedGeometryConsumer : SimpleFeature.GeometryConsumer {
+    internal class CollectedGeometryConsumer : SimpleFeature.GeometryConsumer<Generic> {
         private val myPoints = ArrayList<Vec<Generic>>()
         private val myLineStrings = ArrayList<LineString<Generic>>()
         private val myPolygons = ArrayList<Polygon<Generic>>()
@@ -532,32 +532,20 @@ class ParserTest {
             myPolygons.add(polygon)
         }
 
-        override fun onMultiPoint(multiPoint: MultiPoint<Generic>, idList: List<Int>) {
-            if (idList.isEmpty()) {
-                myMultiPoints.add(multiPoint)
-            } else {
-                myPoints.addAll(multiPoint)
-            }
+        override fun onMultiPoint(multiPoint: MultiPoint<Generic>) {
+            myMultiPoints.add(multiPoint)
         }
 
-        override fun onMultiLineString(multiLineString: MultiLineString<Generic>, idList: List<Int>) {
-            if (idList.isEmpty()) {
-                myMultiLineStrings.add(multiLineString)
-            } else {
-                myLineStrings.addAll(multiLineString)
-            }
+        override fun onMultiLineString(multiLineString: MultiLineString<Generic>) {
+            myMultiLineStrings.add(multiLineString)
         }
 
-        override fun onMultiPolygon(multipolygon: MultiPolygon<Generic>, idList: List<Int>) {
-            if (idList.isEmpty()) {
-                myMultiPolygons.add(multipolygon)
-            } else {
-                myPolygons.addAll(multipolygon)
-            }
+        override fun onMultiPolygon(multipolygon: MultiPolygon<Generic>) {
+            myMultiPolygons.add(multipolygon)
         }
     }
 
-    internal class SimpleGeometryConsumer : SimpleFeature.GeometryConsumer {
+    internal class SimpleGeometryConsumer : SimpleFeature.GeometryConsumer<Generic> {
         var point: Vec<Generic>? = null
             private set
         var lineString: LineString<Generic>? = null
@@ -583,15 +571,15 @@ class ParserTest {
             this.polygon = polygon
         }
 
-        override fun onMultiPoint(multiPoint: MultiPoint<Generic>, idList: List<Int>) {
+        override fun onMultiPoint(multiPoint: MultiPoint<Generic>) {
             this.multiPoint = multiPoint
         }
 
-        override fun onMultiLineString(multiLineString: MultiLineString<Generic>, idList: List<Int>) {
+        override fun onMultiLineString(multiLineString: MultiLineString<Generic>) {
             this.multiLineString = multiLineString
         }
 
-        override fun onMultiPolygon(multipolygon: MultiPolygon<Generic>, idList: List<Int>) {
+        override fun onMultiPolygon(multipolygon: MultiPolygon<Generic>) {
             this.multiPolygon = multipolygon
         }
     }
