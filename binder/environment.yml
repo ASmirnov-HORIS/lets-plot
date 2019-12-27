@@ -8,9 +8,10 @@ dependencies:
   - python=3.7
   - numpy
   - pandas
+  - geopandas
   - matplotlib
   - pip
   - pip:                            # Packages installed from PyPI
-      - https://test-files.pythonhosted.org/packages/ea/71/28b1e842b0b355eab3c1ba77dfc1fa979f3bb96590663737fc2a9ff94dea/lets_plot-1.1.dev1-cp37-cp37m-manylinux1_x86_64.whl
+      - https://jetbrains.bintray.com/lets-plot/lets_plot-1.1.dev1-cp37-cp37m-manylinux1_x86_64.whl
       - pypng
       - scikit-datasets
